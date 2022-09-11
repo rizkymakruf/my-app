@@ -5,15 +5,18 @@ export default function Home() {
   return (
     <>
       <div className="w-full h-screen bg-white p-5">
+        {/* image */}
         <div className="w-full h-3/6 rounded-md flex justify-center items-center">
           <Image src={Rocket} />
         </div>
+        {/* headline */}
         <div className="w-full h-1/6 relative">
           <div className="flex flex-col absolute bottom-2">
             <p className="text-5xl font-">Let's</p>
             <p className="text-5xl font-">Get started!</p>
           </div>
         </div>
+        {/* form login */}
         <div className="w-full h-2/6 flex flex-col space-y-3">
           <div className="w-full relative">
             <div className="absolute left-3 top-3 items-center">
