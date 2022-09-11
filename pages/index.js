@@ -20,7 +20,7 @@ export default function Home() {
             <p className="text-5xl">Logged in!</p>
           </div>
         </div>
-        {/* form login */}
+        {/* form login*/}
         {/* <div className="w-full h-2/6 flex flex-col space-y-3">
           <div className="w-full relative">
             <div className="absolute left-3 top-3 items-center">
@@ -88,6 +88,18 @@ export default function Home() {
           <button className="w-full rounded-full bg-gradient-to-r from-blue-500 to-red-400 py-3 flex justify-center items-center text-white font-bold text-lg ">
             Back to home
           </button>
+          <div className="w-full flex justify-center items-center gap-1 pt-4">
+            <div className="w-full">
+              <hr />
+            </div>
+            <p>or</p>
+            <div className="w-full">
+              <hr />
+            </div>
+          </div>
+          <div className="w-full flex justify-center items-center pb-2">
+            <button>Logout?</button>
+          </div>
         </div>
       </div>
     </>
