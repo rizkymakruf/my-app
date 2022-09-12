@@ -11,7 +11,7 @@ const UseState = () => {
   );
 
   return (
-    <div className="w-fulll h-screen bg-gray-300 flex justify-center items-center">
+    <div className="w-fulll h-screen bg-gray-400 flex justify-center items-center">
       <div className="flex flex-row p-4 gap-x-4">
         <button
           onClick={onClick("makanan")}
