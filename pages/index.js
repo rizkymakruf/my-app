@@ -11,17 +11,17 @@ export default function Home() {
         </div>
         {/* headline */}
         <div className="w-full h-1/6 relative">
-          {/* <div className="flex flex-col absolute bottom-2">
+          <div className="flex flex-col absolute bottom-2">
             <p className="text-5xl font-">Let's</p>
             <p className="text-5xl font-">Get started!</p>
-          </div> */}
-          <div className="flex flex-col absolute bottom-2">
+          </div>
+          {/* <div className="flex flex-col absolute bottom-2">
             <p className="text-5xl">You have</p>
             <p className="text-5xl">Logged in!</p>
-          </div>
+          </div> */}
         </div>
         {/* form login*/}
-        {/* <div className="w-full h-2/6 flex flex-col space-y-3">
+        <div className="w-full h-2/6 flex flex-col space-y-3">
           <div className="w-full relative">
             <div className="absolute left-3 top-3 items-center">
               <svg
@@ -83,8 +83,8 @@ export default function Home() {
           <div className="w-full flex justify-center items-center pb-2">
             <button>Register?</button>
           </div>
-        </div> */}
-        <div className="w-full h-2/6 flex flex-col justify-center items-center">
+        </div>
+        {/* <div className="w-full h-2/6 flex flex-col justify-center items-center">
           <button className="w-full rounded-full bg-gradient-to-r from-blue-500 to-red-400 py-3 flex justify-center items-center text-white font-bold text-lg ">
             Back to home
           </button>
@@ -100,7 +100,7 @@ export default function Home() {
           <div className="w-full flex justify-center items-center pb-2">
             <button>Logout?</button>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
