@@ -11,8 +11,8 @@ const UseState = () => {
   );
 
   return (
-    <div className="w-fulll h-screen bg-gray-400 flex justify-center items-center">
-      <div className="flex flex-row p-4 gap-x-4">
+    <div className="w-fulll h-screen bg-gray-400 flex flex-col justify-center items-center">
+      <div className="flex flex-row p-4 gap-x-4 justify-center items-center w-full">
         <button
           onClick={onClick("makanan")}
           className={`py-2 px-4 rounded-full ${
@@ -30,12 +30,12 @@ const UseState = () => {
           Minuman
         </button>
         <button
-          onClick={onClick("beol")}
+          onClick={onClick("others")}
           className={`py-2 px-4 rounded-full ${
-            menu === "beol" ? "bg-blue-500" : ""
+            menu === "others" ? "bg-blue-500" : ""
           } duration-200 text-lg font-bold text-white`}
         >
-          Beol
+          Others
         </button>
         <button
           onClick={onClick("ppppp")}
@@ -45,6 +45,33 @@ const UseState = () => {
         >
           ppppp
         </button>
+      </div>
+      <div className="w-full flex justify-center items-center gap-2">
+        {menu === "makanan" ? (
+          <div className="w-full flex flex-col space-y-2 my-2 bg-white p-2">
+            <div className="w-full flex gap-3">
+              <div className="">
+                <div className="w-32 h-32 bg-gray-400 rounded-lg"></div>
+              </div>
+              <div className="w-3/6 flex flex-col">
+                <p className="text-md font-semibold text-black">
+                  Raisin Delisght Frappee
+                </p>
+                <p className="text-gray-400 text-sm">
+                  Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry.
+                </p>
+              </div>
+              <div className="w-1/6">Rp 50.000</div>
+            </div>
+          </div>
+        ) : menu === "minuman" ? (
+          <p className="text-lg">Minuman</p>
+        ) : menu === "others" ? (
+          <p className="text-lg">Others</p>
+        ) : (
+          <p className="text-lg">ppppp</p>
+        )}
       </div>
     </div>
   );
