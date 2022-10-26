@@ -1,13 +1,61 @@
 import Image from "next/image";
+import FormLogin from "../components/form/formLogin";
 import Rocket from "../public/Rocket.png";
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
+// import fetchJson, { FetchError } from "../lib/fetchJson";
+import { GlobalContext } from "../context/global";
+import { withIronSessionSsr } from "iron-session/next";
+import { sessionOptions } from "../lib/session";
+import { checkUid } from "../lib/arangoDb";
+import { redirect, retObject, checkerToken } from "../lib/listFunct";
+
+// export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
+//   var user = await req.session.user;
+//   if (!user || !user.access_token) {
+//     return retObject({ isLogin: false });
+//   }
+
+//   const validationToken = await checkerToken(user);
+//   if (validationToken.error) {
+//     await req.session.destroy();
+//     return redirect("/");
+//   }
+
+//   if (validationToken.status === "refresh") {
+//     user = {
+//       isLoggedIn: true,
+//       access_token: validationToken.access_token,
+//       refresh_token: validationToken.refresh_token,
+//     };
+//     req.session.user = user;
+//     await req.session.save();
+//   }
+
+//   global.atob = require("atob");
+
+//   const uid = JSON.parse(atob(user.access_token.split(".")[1]));
+//   const checkUids = await checkUid(uid.user);
+
+//   return retObject({
+//     isLogin: true,
+//   });
+// }, sessionOptions);
 
 export default function Home() {
+  const router = useRouter();
+  const { globalCtx, globalAct } = useContext(GlobalContext);
+  useEffect(() => {
+    globalAct.setIsFetch(false);
+    globalAct.setErrorMsg("");
+    router.prefetch("/config/dashboard");
+  }, []);
   return (
     <>
       <div className="w-full h-screen bg-white p-5">
         {/* image */}
         <div className="w-full h-3/6 rounded-md flex justify-center items-center">
-          <Image src={Rocket} />
+          <Image src={Rocket} priority />
         </div>
         {/* headline */}
         <div className="w-full h-1/6 relative">
@@ -19,70 +67,6 @@ export default function Home() {
             <p className="text-5xl">You have</p>
             <p className="text-5xl">Logged in!</p>
           </div> */}
-        </div>
-        {/* form login*/}
-        <div className="w-full h-2/6 flex flex-col space-y-3">
-          <div className="w-full relative">
-            <div className="absolute left-3 top-3 items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-400"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                />
-              </svg>
-            </div>
-            <input
-              className="bg-gray-200 rounded-full w-full py-3 px-3 pl-10 focus:outline-none focus:ring-blue-300 focus:ring-2"
-              placeholder="Username"
-            ></input>
-          </div>
-          <div className="w-full relative">
-            <div className="absolute left-3 top-3 items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 text-gray-400"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                />
-              </svg>
-            </div>
-            <input
-              className="bg-gray-200 rounded-full w-full py-3 px-3 pl-10 focus:outline-none focus:ring-blue-300 focus:ring-2"
-              placeholder="Password"
-            ></input>
-          </div>
-          <div className="w-full pt-2">
-            <button className="w-full rounded-full bg-gradient-to-r from-blue-500 to-red-400 py-3 flex justify-center items-center text-white font-bold text-lg">
-              Login
-            </button>
-          </div>
-          <div className="w-full flex justify-center items-center gap-1">
-            <div className="w-full">
-              <hr />
-            </div>
-            <p>or</p>
-            <div className="w-full">
-              <hr />
-            </div>
-          </div>
-          <div className="w-full flex justify-center items-center pb-2">
-            <button>Register?</button>
-          </div>
         </div>
         {/* <div className="w-full h-2/6 flex flex-col justify-center items-center">
           <button className="w-full rounded-full bg-gradient-to-r from-blue-500 to-red-400 py-3 flex justify-center items-center text-white font-bold text-lg ">
@@ -101,6 +85,38 @@ export default function Home() {
             <button>Logout?</button>
           </div>
         </div> */}
+        <FormLogin
+          // Default Form
+          globalCtx={globalCtx}
+          globalAct={globalAct}
+          onSubmit={async function handleSubmit(e) {
+            e.preventDefault();
+            globalAct.setIsFetch(true);
+
+            const body = {
+              username: e.currentTarget.username.value,
+              password: e.currentTarget.password.value,
+              uri: "login",
+            };
+
+            try {
+              const res = await fetchJson("/api/prot/post", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+              });
+              router.push("/hooks/useState");
+            } catch (error) {
+              if (error instanceof FetchError) {
+                globalAct.setErrorMsg(error.data.message);
+              } else {
+                globalAct.setErrorMsg("An unexpected error happened");
+              }
+            }
+
+            globalAct.setIsFetch(false);
+          }}
+        />
       </div>
     </>
   );
